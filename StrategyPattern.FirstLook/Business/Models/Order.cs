@@ -11,14 +11,18 @@ namespace StrategyPattern.FirstLook.Business.Models
 
         public ISalesTaxStrategy? SalesTaxStrategy { get; set; }
 
-        public decimal GetTax()
+        public decimal GetTax(ISalesTaxStrategy? salesTaxStrategy = default)
         {
-            if (SalesTaxStrategy == null)
+            // if any tax strategy is passed, it will be used that one
+            // set on our context
+            var strategy = salesTaxStrategy ?? SalesTaxStrategy;
+
+            if (strategy == null)
             {
                 return 0m;
             }
 
-            return SalesTaxStrategy.GetTaxFor(this);
+            return strategy.GetTaxFor(this);
         }
     }
 }
