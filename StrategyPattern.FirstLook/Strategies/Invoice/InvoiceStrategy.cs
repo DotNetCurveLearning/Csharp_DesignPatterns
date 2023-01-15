@@ -30,7 +30,7 @@ namespace StrategyPattern.FirstLook.Business.Strategies.Invoice
 
             invoice += Environment.NewLine + Environment.NewLine;
 
-            var tax = order.GetTax();
+            var tax = order.SalesTaxStrategy == null ? 0m : order.SalesTaxStrategy.GetTaxFor(order);
             var total = order.TotalPrice + tax;
 
             invoice += $"TAX TOTAL: {tax}{Environment.NewLine}";
