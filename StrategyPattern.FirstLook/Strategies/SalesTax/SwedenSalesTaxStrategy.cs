@@ -10,18 +10,16 @@ namespace StrategyPattern.FirstLook.Strategies.SalesTax
 
             foreach (var item in order.LineItems)
             {
-                // item.Key
+                totalTax = item.Key.ItemType switch {
+                    ItemType.Food => totalTax + (item.Key.Price * 0.06m) * item.Value,
+                    ItemType.Literature => totalTax + (item.Key.Price * 0.08m) * item.Value,
+                    ItemType.Service => totalTax + (item.Key.Price * 0.25m) * item.Value,
+                    ItemType.Hardware => totalTax + (item.Key.Price * 0.25m) * item.Value,
+                    _ => throw new ArgumentOutOfRangeException(nameof(item.Key.ItemType), $"Not expected type value: {item.Key.ItemType}")
+                };
             }
 
-            var destination = order.ShippingDetails.DestinationCountry.ToLowerInvariant();
-            var origin = order.ShippingDetails.OriginCountry.ToLowerInvariant();
-
-            if (destination == origin)
-            {
-                return order.TotalPrice * 0.25m;
-            }
-
-            return 0;
+            return totalTax;
         }
     }
 }
